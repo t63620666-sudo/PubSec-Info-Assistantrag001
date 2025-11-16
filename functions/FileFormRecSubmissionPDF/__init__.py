@@ -80,10 +80,13 @@ def main(msg: func.QueueMessage) -> None:
         queued_count = message_json["submit_queued_count"]
         statusLog.upsert_document(
             blob_path,
-            f"{FUNCTION_NAME} - Received message from pdf-submit-queue ",
+            f"{FUNCTION_NAME} - Received message from pdf-submit-queue: {json.dumps(message_json)} ",
             StatusClassification.DEBUG,
             State.PROCESSING,
         )
+        # Add 2 minute delay
+        time.sleep(120)
+        
         statusLog.upsert_document(
             blob_path,
             f"{FUNCTION_NAME} - Submitting to Form Recognizer",
@@ -193,3 +196,4 @@ def main(msg: func.QueueMessage) -> None:
         )
         
     statusLog.save_document(blob_path)
+
